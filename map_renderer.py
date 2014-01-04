@@ -9,15 +9,15 @@ class VPythonRenderer():
         x_direction = (5, 0, 0)
         y_direction = (0, 5, 0)
         z_direction = (0, 0, 5)
-
+        # Axis X
         pointerX = arrow(pos=zero, axis=x_direction,
                          shaftwidth=0.5, color=color.red)
         labelX = label(pos=x_direction, text='X')
-        
+        # Axis Y
         pointerY = arrow(pos=zero, axis=y_direction,
                          shaftwidth=0.5, color=color.blue)
         labelY = label(pos=y_direction, text='Y')
-        
+        # Axis Z
         pointerZ = arrow(pos=zero, axis=z_direction,
                          shaftwidth=0.5, color=color.yellow)
         labelZ = label(pos=z_direction, text='Z')
@@ -35,7 +35,7 @@ class VPythonRenderer():
     def draw_walls(self, cells):
         for cell in cells:
             if cell.is_wall:
-                box(pos=(cell.point.x, cell.point.y, 0.5),
+                box(pos=(cell.x, cell.y, 0.5),
                     width=1, length=1, heigth=1, color=color.blue)
 
     def draw_path(self, path):
@@ -55,5 +55,5 @@ class VPythonRenderer():
         self.draw_cell(finish, color.red)
         
     def draw_cell(self, cell, clr):
-        box(pos=(cell.point.x, cell.point.y, 0.5),
+        box(pos=(cell.x, cell.y, 0.5),
             width=1, length=1, heigth=1, color=clr)

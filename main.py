@@ -1,6 +1,7 @@
 import os
 
-from map_types import Map, Point
+from map_types import Map, Cell
+from path_finder import PathFinder
 
 
 def main():
@@ -10,14 +11,13 @@ def main():
     bmp_path = os.path.join(os.getcwd(), 'map.bmp')
     astar_map.load_map(bmp_path)
 
-    astar_map.start = Point(1, 20)
-    astar_map.finish = Point(85, 20)
+    astar_map.start = Cell(1, 20)
+    astar_map.finish = Cell(85, 20)
     astar_map.draw_map()
-    astar_map.find_path()
-    astar_map.draw_path()
-    
-    # Optional drawing
-    astar_map.draw_calculated_cells()
+
+    a_star_algorithm = PathFinder(astar_map)
+    a_star_algorithm.find_path()
+
 
 if __name__ == "__main__":
     main()
