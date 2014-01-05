@@ -3,6 +3,9 @@ from visual import scene, curve, box, color, arrow, label
 
 class VPythonRenderer():
 
+    def __init__(self):
+        self.field = {}
+
     def draw_axes(self):
         # scene.forward = (0, 0, -1) # Default view direction
         zero = (0, 0, 0)
@@ -33,20 +36,19 @@ class VPythonRenderer():
                   color=color.green)
 
     def draw_walls(self, cells):
-        for cell in cells:
+        for cell in cells.values():
             if cell.is_wall:
-                box(pos=(cell.x, cell.y, 0.5),
-                    width=1, length=1, heigth=1, color=color.blue)
+                self.draw_cell(cell, color.blue)
 
     def draw_path(self, path):
         for cell in path:
             self.draw_cell(cell, color.green)
             
-    def draw_calculated_cells(self, closed_list, open_list):
-        for cell in closed_list:
-            self.draw_cell(cell, color.yellow)
-        for cell in open_list:
-            self.draw_cell(cell, color.cyan)
+    def draw_open_list_cell(self, cell):
+        self.draw_cell(cell, color.yellow)
+
+    def draw_closed_list_cell(self, cell):
+        self.draw_cell(cell, color.cyan)
                     
     def draw_start(self, start):
         self.draw_cell(start, color.white)
@@ -55,5 +57,11 @@ class VPythonRenderer():
         self.draw_cell(finish, color.red)
         
     def draw_cell(self, cell, clr):
-        box(pos=(cell.x, cell.y, 0.5),
+        new_box = box(pos=(cell.x, cell.y, 0.5),
             width=1, length=1, heigth=1, color=clr)
+        self.field[(cell.x, cell.y)] = new_box
+
+    def hide_cell(self, cell):
+        point = (cell.x, cell.y)
+        if self.field.has_key(point):
+            self.field[point].set_visible(False)
