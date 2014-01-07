@@ -2,7 +2,6 @@ from PIL import Image
 from xml.dom import minidom
 
 from map_renderer import VPythonRenderer
-# from path_finder import PathFinder
 
 
 class Cell():
@@ -51,7 +50,7 @@ class Map():
                 self.field[point] = cell
 
     def draw_map(self):
-        self.__canvas.draw_axes()
+        # self.__canvas.draw_axes()
         self.__canvas.draw_grid(self.width, self.length)
         self.__canvas.draw_walls(self.field)
         self.__canvas.draw_start(self.start)
@@ -59,11 +58,6 @@ class Map():
 
     def open_list_is_empty(self):
         if self._open_list:
-            return False
-        return True
-
-    def closed_list_is_empty(self):
-        if self._closed_list:
             return False
         return True
 
@@ -79,7 +73,8 @@ class Map():
 
     def add_to_open_list(self, cell):
         self._open_list[(cell.x, cell.y)] = cell
-        if (cell.x, cell.y) != (self.start.x, self.start.y):
+        if (cell.x, cell.y) != (self.start.x, self.start.y) and \
+            (cell.x, cell.y) != (self.finish.x, self.finish.y):
             self.__canvas.draw_open_list_cell(cell)
 
     def add_to_closed_list(self, cell):
@@ -90,7 +85,6 @@ class Map():
 
     def remove_from_open_list(self, cell):
         del self._open_list[(cell.x, cell.y)]
-        # print self._open_list
         if (cell.x, cell.y) != (self.start.x, self.start.y) and \
             (cell.x, cell.y) != (self.finish.x, self.finish.y):
             self.__canvas.hide_cell(cell)

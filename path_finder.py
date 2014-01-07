@@ -9,26 +9,6 @@ class PathFinder():
 
     def __init__(self, world):
         self.world = world
-        """
-        Example of data
-        world.start = Cell()
-        world.finish = Cell()
-        world.field = {(x, y): Cell(),...}
-        world._open_list = {(x, y): Cell(),...}
-        world._closed_list = {(x, y): Cell(),...}
-
-        Needed features
-        world.add_to_open_list(Cell())
-        world.add_to_closed_list(Cell())
-        world.del_from_open_list((x, y))
-        world.del_from_closed_list((x, y))
-        world.move_to_closed_list((x, y))
-        world.get_minF_cell()
-        world.cell_in_open_list(Cell())
-        world.cell_in_closed_list(Cell())
-        world.get_cell((x, y))
-        world.open_list_is_empty()
-        """
 
     def G(self, cell, parent):
         if parent is None:
@@ -66,12 +46,16 @@ class PathFinder():
         self.world.start.G = self.G(self.world.start, self.world.start.parent)
         self.world.start.H = self.H(self.world.start, self.world.finish)
         self.world.start.F = self.world.start.G + self.world.start.H
-
         self.world.add_to_open_list(self.world.start)
-
-
         while not self.world.open_list_is_empty():
-            from time import sleep;sleep(0.01)
+            # print "Open list"
+            # for i, j in self.world._open_list.items():
+            #     print "Cell=%s H=%d, G=%d, F=%d" % (i, j.H, j.G, j.F)
+            # print "Closed list"
+            # for i, j in self.world._closed_list.items():
+            #     print "Cell=%s H=%d, G=%d, F=%d" % (i, j.H, j.G, j.F)
+            # import pdb;pdb.set_trace()
+            # from time import sleep;sleep(0.01)
             if self.world.cell_in_open_list(self.world.finish):
                 print "Path found!"
                 # Compose path
@@ -86,13 +70,13 @@ class PathFinder():
                     not self.world.cell_in_closed_list(near_cell)):
                     if not self.world.cell_in_open_list(near_cell):
                         near_cell.parent = curr_cell
-                        near_cell.G = self.G(near_cell, curr_cell)
+                        near_cell.G = self.G(near_cell, curr_cell) + curr_cell.G
                         near_cell.H = self.H(near_cell, self.world.finish)
                         near_cell.F = near_cell.G + near_cell.H
                         self.world.add_to_open_list(near_cell)
                     else:
                         if near_cell.G > curr_cell.G + self.G(near_cell, curr_cell):
                             near_cell.parent = curr_cell
-                            near_cell.G = self.G(near_cell, curr_cell)
+                            near_cell.G = curr_cell.G + self.G(near_cell, curr_cell)
                             near_cell.F = near_cell.G + near_cell.H
         print "Path not found!"
