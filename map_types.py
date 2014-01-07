@@ -5,11 +5,9 @@ from map_renderer import VPythonRenderer
 
 
 class Cell():
-
-    def __init__(self, x, y, is_wall=False,
+    def __init__(self, point, is_wall=False,
                  G=None, H=None, F=None, parent=None):
-        self.x = x
-        self.y = y
+        self.point = point
         self.is_wall = is_wall
         self.G = G
         self.H = H
@@ -18,7 +16,7 @@ class Cell():
 
 
 class Map():
-    
+
     def __init__(self):
         self.__canvas = VPythonRenderer()
         self.width = 0
@@ -44,9 +42,9 @@ class Map():
                 point = (x, y)
                 rgb = image.getpixel(point)
                 if (rgb[0] < 255 and rgb[1] < 255 and rgb[2] < 255):
-                    cell = Cell(x, y, is_wall=True)
+                    cell = Cell(point, is_wall=True)
                 else:
-                    cell = Cell(x, y, is_wall=False)
+                    cell = Cell(point, is_wall=False)
                 self.field[point] = cell
 
     def draw_map(self):
@@ -62,31 +60,31 @@ class Map():
         return True
 
     def cell_in_open_list(self, cell):
-        if self._open_list.has_key((cell.x, cell.y)):
+        if self._open_list.has_key(cell.point):
             return True
         return False
 
     def cell_in_closed_list(self, cell):
-        if self._closed_list.has_key((cell.x, cell.y)):
+        if self._closed_list.has_key(cell.point):
             return True
         return False
 
     def add_to_open_list(self, cell):
-        self._open_list[(cell.x, cell.y)] = cell
-        if (cell.x, cell.y) != (self.start.x, self.start.y) and \
-            (cell.x, cell.y) != (self.finish.x, self.finish.y):
+        self._open_list[cell.point] = cell
+        if cell.point != self.start.point and \
+            cell.point != self.finish.point:
             self.__canvas.draw_open_list_cell(cell)
 
     def add_to_closed_list(self, cell):
-        self._closed_list[(cell.x, cell.y)] = cell
-        if (cell.x, cell.y) != (self.finish.x, self.finish.y) and \
-            (cell.x, cell.y) != (self.start.x, self.start.y):
+        self._closed_list[cell.point] = cell
+        if cell.point != self.finish.point and \
+            cell.point != self.start.point:
             self.__canvas.draw_closed_list_cell(cell)
 
     def remove_from_open_list(self, cell):
-        del self._open_list[(cell.x, cell.y)]
-        if (cell.x, cell.y) != (self.start.x, self.start.y) and \
-            (cell.x, cell.y) != (self.finish.x, self.finish.y):
+        del self._open_list[cell.point]
+        if cell.point != self.start.point and \
+            cell.point != self.finish.point:
             self.__canvas.hide_cell(cell)
 
     def get_minF_cell(self):

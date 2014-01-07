@@ -14,8 +14,8 @@ class PathFinder():
         if parent is None:
             print "parent cell is None"
             return 0
-        x, y = parent.x, parent.y
-        point = (cell.x, cell.y)
+        x, y = parent.point
+        point = cell.point
         if (point == (x-1, y) or
             point == (x+1, y) or
             point == (x, y+1) or
@@ -28,13 +28,13 @@ class PathFinder():
             return 14
     
     def H(self, cell, finish):
-        xc, yc = cell.x, cell.y
-        xf, yf = finish.x, finish.y
+        xc, yc = cell.point
+        xf, yf = finish.point
         h = 10 * (abs(xc-xf) + abs(yc-yf))
         return h
 
     def near_cells(self, cell):
-        x, y = cell.x, cell.y
+        x, y = cell.point
         near_cells = [
             (x-1, y-1), (x, y-1), (x+1, y-1), (x-1, y),
             (x+1, y), (x-1, y+1), (x, y+1), (x+1, y+1)
@@ -59,7 +59,7 @@ class PathFinder():
             if self.world.cell_in_open_list(self.world.finish):
                 print "Path found!"
                 # Compose path
-                # import pdb;pdb.set_trace()
+                import pdb;pdb.set_trace()
                 return
             curr_cell = self.world.get_minF_cell()
             self.world.move_to_closed_list(curr_cell)
@@ -70,7 +70,7 @@ class PathFinder():
                     not self.world.cell_in_closed_list(near_cell)):
                     if not self.world.cell_in_open_list(near_cell):
                         near_cell.parent = curr_cell
-                        near_cell.G = self.G(near_cell, curr_cell) + curr_cell.G
+                        near_cell.G = curr_cell.G + self.G(near_cell, curr_cell)
                         near_cell.H = self.H(near_cell, self.world.finish)
                         near_cell.F = near_cell.G + near_cell.H
                         self.world.add_to_open_list(near_cell)

@@ -57,11 +57,12 @@ class VPythonRenderer():
         self.draw_cell(finish, color.red)
         
     def draw_cell(self, cell, clr):
-        new_box = box(pos=(cell.x, cell.y, 0.5),
+        x, y = cell.point
+        new_box = box(pos=(x, y, 0.5),
             width=1, length=1, heigth=1, color=clr)
-        self.field[(cell.x, cell.y)] = new_box
+        self.field[cell.point] = new_box
 
     def hide_cell(self, cell):
-        point = (cell.x, cell.y)
+        point = cell.point
         if self.field.has_key(point):
             self.field[point].set_visible(False)
